@@ -10,7 +10,7 @@ class SearchArgs:
     """
     created_from: date | None
     lang: str | None
-    page_id: int = 0
+    page_id: int = 1
 
     def __str__(self):
         return f"{self.created_from};{self.lang};{self.page_id}"

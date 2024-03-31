@@ -1,6 +1,9 @@
 # Github Searcher
 
-This repository provides a simple service to search the most popular public repositories on Github (based on stars):
+The repository provides a lightw service to search the most popular public repositories on Github. 
+The popularity of a repository is defined by stars count.
+
+Service handlers:
 
 1. Get a list of the most popular repositories.
 2. Get the top 10 popular repositories.

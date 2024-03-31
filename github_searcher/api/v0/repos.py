@@ -21,9 +21,9 @@ api_v0_router = APIRouter()
 async def get_repos_by_popularity(
         repos_service: Annotated[ReposService, Depends(get_repos_service)],
         session: Annotated[ClientSession, Depends(get_client_session)],
-        created_from: date | None = Query(None, description="Date to filter repos created from"),
-        lang: str | None = Query(None, description="Filter the language of repos"),
-        page_id: int | None = Query(None, description="Page number of results to receive"),
+        created_from: date | None = Query(None, description="Date to filter repos created from (Optional)"),
+        language: str | None = Query(None, description="Filter the language of repos (Optional)"),
+        page_id: int | None = Query(None, ge=1, description="The number of page with results to receive (Optional)"),
 ):
     """
     Handler to get the repos list, sorted desc by number of starts.
@@ -33,7 +33,7 @@ async def get_repos_by_popularity(
         session=session,
         args=SearchArgs(
             created_from=created_from,
-            lang=lang,
+            lang=language,
             page_id=page_id,
         ),
     )
@@ -46,8 +46,8 @@ async def get_repos_by_popularity(
 async def get_top10_repos(
         repos_service: Annotated[ReposService, Depends(get_repos_service)],
         session: Annotated[ClientSession, Depends(get_client_session)],
-        created_from: date | None = Query(None, description="Date to filter repos created from"),
-        lang: str | None = Query(None, description="Filter the language of repos"),
+        created_from: date | None = Query(None, description="Date to filter repos created from (Optional)"),
+        language: str | None = Query(None, description="Filter the language of repos (Optional)"),
 ):
     """
     Handler to get top 10 repositories.
@@ -57,7 +57,7 @@ async def get_top10_repos(
         k=10,
         args=SearchArgs(
             created_from=created_from,
-            lang=lang,
+            lang=language,
         ),
     )
 
@@ -69,8 +69,8 @@ async def get_top10_repos(
 async def get_top50_repos(
         repos_service: Annotated[ReposService, Depends(get_repos_service)],
         session: Annotated[ClientSession, Depends(get_client_session)],
-        created_from: date | None = Query(None, description="Date to filter repos created from"),
-        lang: str | None = Query(None, description="Filter the language of repos"),
+        created_from: date | None = Query(None, description="Date to filter repos created from (Optional)"),
+        language: str | None = Query(None, description="Filter the language of repos (Optional)"),
 ):
     """
        Handler to get top 50 repositories.
@@ -79,7 +79,7 @@ async def get_top50_repos(
         session=session,
         args=SearchArgs(
             created_from=created_from,
-            lang=lang,
+            lang=language,
         ),
         k=50,
     )
@@ -92,8 +92,8 @@ async def get_top50_repos(
 async def get_top100_repos(
         repos_service: Annotated[ReposService, Depends(get_repos_service)],
         session: Annotated[ClientSession, Depends(get_client_session)],
-        created_from: date | None = Query(None, description="Date to filter repos created from"),
-        lang: str | None = Query(None, description="Filter the language of repos"),
+        created_from: date | None = Query(None, description="Date to filter repos created from (Optional)"),
+        language: str | None = Query(None, description="Filter the language of repos (Optional)"),
 ):
     """
        Handler to get top 100 repositories.
@@ -102,7 +102,7 @@ async def get_top100_repos(
         session=session,
         args=SearchArgs(
             created_from=created_from,
-            lang=lang,
+            lang=language,
         ),
         k=100,
     )

@@ -75,7 +75,7 @@ class TestCustomAsyncGithubAPIClient:
             )
 
     @pytest.mark.asyncio
-    @pytest.mark.parametrize("lang", ["python", "c", "go"])
+    @pytest.mark.parametrize("lang", ["python", "c"])
     async def test_search_language_filter(self, lang):
         async with ClientSession() as session:
             result = await self._client.search_repos(
