@@ -1,38 +1,51 @@
 # Github Searcher
 
-The repository provides a lightw service to search the most popular public repositories on Github. 
-The popularity of a repository is defined by stars count.
+The repository provides a ready-to-go service to search the most popular public repositories on Github. The rank of each repository is determined based on its current number of stars.
 
-Service handlers:
+The service is able to provide:
+1. A list of the most popular repositories
+2. The top 10 popular repositories.
+3. The top 50 popular repositories.
+4. The top 100 popular repositories.
 
-1. Get a list of the most popular repositories.
-2. Get the top 10 popular repositories.
-3. Get the top 50 popular repositories.
-4. Get the top 100 popular repositories.
+Following search parameters are available:
+1. `created_from` - return only repositories created from a given date onwards
+2. `language` - return only repositories written in a specific language
 
-The service provides the ability to specify some search parameters:
-1. `language` - return only repositories written in this language
-2. `created from` - return only repositories, created after or on this date
 
-## Decisions note
+## Decisions for scalability and performance
 ### Pagination
-The search result for popular repositories on Github could be huge. To optimize performance and scalability, pagination 
-was added for searching. The page number could be specified using the page_id parameter. If it's not specified, 
-only the first page with repositories will be returned. An empty list will be returned for a page id that exceeds 
-the amount of pages.
+Pagination (page numbering) has been added to optimize search results, as well as to ensure scalability and increase performance.
+
+`page_id` is a parameter for specifying the page number.
+
+- If `page_id` is not specified, then only the first page will be returned
+- If `page_id` exceeds the number of all existing pages, then an empty list will be returned
+
 
 ### Caching
-The most popular repositories don't change often, so there is no need to get the page with repos from Github for every 
-request. For performance, cache support was added. Memory cache is used in the current implementation. 
-Search arguments could be used as keys for caching, and the received page is saved to cache. By default, TTL is 60 seconds. 
-But the cache could be disabled using ENV settings (see below). A protocol for caching client is defined so the client could be replaced.
+The list of the most popular repositories are quite constant. Therefore, there is no need to get the repositories page directly from Github every request.
+
+- Cache support has been added to speed up response times. But it can be disabled through the ENV settings (see below).
+
+- The current implementation is cache in memory. The search arguments are used as keys for caching, and the resulting page is stored in the cache. The TTL default is 60 seconds.
+
+- The defined client caching protocol. A client may be replaced.
+
 
 ### Github API Client
-There is an official Github API client for Python, but it's synchronous. To achieve scalability, I prefer to use the asyncio power of Python. 
-There are several async Github clients for Python, but their popularity isn't great. 
-So, I decided to prototype quickly my own async client only for searching in repositories. 
-A protocol for the Github API client is defined so the client could be replaced.
+Maximum query optimization is required to ensure scalability. Therefore, it is necessary to use the **asyncio** power of Python.
 
+Problems:
+- The official Github API client for Python is synchronous, which doesn’t allow achieving the required performance
+- Several existing asynchronous Github clients aren’t popular.
+
+Proposed and implemented solution:
+- My own async client prototype (tested) only for searching repositories.
+- The defined client API Github protocol. A client may be replaced.
+
+
+## Decisions for clarity and clean code
 ### Code structure
 The code structure (main folders) is presented below. 
 ```commandline
@@ -53,30 +66,30 @@ The code structure (main folders) is presented below.
 ```
 
 
-## Build service
+## Local service setup
+### Build service
 From the root of repositories run
 ```commandline
 docker build -t github-searcher .
 ```
 
-## Configure service
-Configure Service
-You could change some settings before running, changing ENV parameters in the .env file.
+### Configure service
+Before launching, all settings can be changed through the ENV parameters in the .env file.
 
 * `LOG_LEVEL` - setup level of logs [`INFO`, `DEBUG`]
 * `CACHE_ENABLE` - true if you'd like to use memory cache, false if not
 * `GITHUB_API_TOKEN` - token for Github API. If it's not provided, Github constrains the rate limit.
 
-## Run service
+### Run service
 To run the service after building:
 ```commandline
 docker run --name=<container_name> -idt -p 8000:8000 --env-file .env github-searcher
 ```
 
-To test service API, please open 
+To play with the service API, please open 
 http://127.0.0.1:8000/docs#
 
-## Stop service
+### Stop service
 To stop the service:
 ```commandline
 docker stop <container_name>
@@ -84,7 +97,7 @@ docekr rm <container_name>
 ```
 
 ## Run tests
-It's not possible to run tests in Docker, but it could be done **locally** from the root of repository.
+Tests could be run **locally** from the root of the repository.
 
 **Preparation**:
 ```commandline
@@ -94,9 +107,7 @@ poetry install
 
 **Run tests**
 ```commandline
-poetry run pytest
+poetry shell
+export GITHUB_API_TOKEN="<your-github-api-token>"
+pytest
 ```
-
-## Security
-Inside the repositories a Github API token is stored and used.
-It's a simple token only with the access to public API.
