@@ -93,3 +93,7 @@ poetry install
 ```commandline
 poetry run pytest
 ```
+
+## Security
+Inside the repositories a Github API token is stored and used.
+It's a simple token only with the access to public API.
