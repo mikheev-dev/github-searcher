@@ -104,7 +104,7 @@ http://127.0.0.1:8000/docs#
 To stop the service:
 ```commandline
 docker stop <container_name>
-docekr rm <container_name>
+docker rm <container_name>
 ```
 
 ## Run tests
