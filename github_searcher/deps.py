@@ -8,7 +8,7 @@ from github_searcher.clients.cache.cache_protocol import CacheProtocol
 from github_searcher.clients.github.custom_async_client import CustomAsyncGithubAPIClient
 from github_searcher.configs.github_api_config import GithubAPIConfig
 from github_searcher.configs.cache_config import CacheConfig
-from github_searcher.services.repos import ReposService
+from github_searcher.services.repos_searching import ReposSearchingService
 
 
 # TODO reformat with dependency injector
@@ -17,17 +17,17 @@ cache = Cache() if CacheConfig().enable else None
 github_api_client = CustomAsyncGithubAPIClient(
     token=GithubAPIConfig().token,
 )
-repos_service = ReposService(
+repos_searching_service = ReposSearchingService(
     api_client=github_api_client,
     cache=cache,
 )
 
 
-def get_cache() -> Cache:
+def get_cache() -> CacheProtocol:
     return cache
 
 
-def get_github_api_client() -> CustomAsyncGithubAPIClient:
+def get_github_api_client() -> GithubAPIClientProtocol:
     return github_api_client
 
 
@@ -36,6 +36,6 @@ async def get_client_session() -> ClientSession:
         yield session
 
 
-def get_repos_service() -> ReposService:
-    return repos_service
+def get_repos_searching_service() -> ReposSearchingService:
+    return repos_searching_service
 

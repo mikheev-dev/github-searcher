@@ -5,7 +5,7 @@ import asyncio
 import aiocache
 import pytest
 
-from github_searcher.services.repos import ReposService
+from github_searcher.services.repos_searching import ReposSearchingService
 from github_searcher.services.search_args import SearchArgs
 from github_searcher.exceptions import (
     GithubApiRateLimitException,
@@ -24,7 +24,7 @@ from tests.utils import (
 
 
 class TestReposService:
-    _service = ReposService(
+    _service = ReposSearchingService(
         api_client=MockedGithubAPIClient()
     )
 
@@ -182,10 +182,10 @@ class TestReposService:
         (None, "go"),
         (date.today() - timedelta(days=10), "go")
     ])
-    @patch.object(ReposService, "_get_from_cache")
-    @patch.object(ReposService, "_set_to_cache")
+    @patch.object(ReposSearchingService, "_get_from_cache")
+    @patch.object(ReposSearchingService, "_set_to_cache")
     async def test_use_cache(self, set_to_cache, get_from_cache, use_cache, page_cached, created_from, lang):
-        service = ReposService(
+        service = ReposSearchingService(
             api_client=MockedGithubAPIClient(),
             cache=aiocache.Cache() if use_cache else None,
         )

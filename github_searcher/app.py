@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 
 import logging
 
-from github_searcher.api.v0.repos import api_v0_router
+from github_searcher.api.v0.repos_searching import api_v0_router
 from github_searcher.configs.logger_config import LogConfig
 from github_searcher.exceptions import (
     GithubApiRateLimitException,

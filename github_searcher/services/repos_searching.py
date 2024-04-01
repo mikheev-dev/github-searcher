@@ -13,7 +13,7 @@ from github_searcher.services.search_args import SearchArgs
 logger = logging.getLogger(__name__)
 
 
-class ReposService:
+class ReposSearchingService:
     """
     Service for interacting with Github API via client, supported protocol.
     Could cache results.

@@ -1,11 +1,13 @@
 from aiohttp import ClientSession
 from datetime import date, timedelta
-from github_searcher.schemas.github_api import (
-    GARepository,
-)
 
 import asyncio
 import random
+
+from github_searcher.schemas.github_api import (
+    GARepository,
+)
+from github_searcher.exceptions import SearchMaxResultsException
 
 
 class MockedGithubAPIClient:
@@ -49,6 +51,9 @@ class MockedGithubAPIClient:
     ) -> list[GARepository]:
         page_id = page_id or 0
         await asyncio.sleep(0.1)
+
+        if page_id > self.MAX_PAGE_COUNT:
+            raise SearchMaxResultsException()
 
         if created_from and created_from > date.today():
             return []
