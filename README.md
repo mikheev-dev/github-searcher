@@ -12,6 +12,17 @@ Following search parameters are available:
 1. `created_from` - return only repositories created from a given date onwards
 2. `language` - return only repositories written in a specific language
 
+## Justification for structure and approaches
+
+This project was done outside of the working environment. Therefore, I selected from various options for code structure and approaches (described below) when developing. Each choice was made with a focus on fulfilling the following criteria:
+
+- Clarity
+- Performance
+- Scalability
+- Code cleanliness
+
+However, in case of tackling a similar issue within the working environment, the development process could be influenced by "development customs" established in a team, internal company documentation and goals set. 
+
 
 ## Decisions for scalability and performance
 ### Pagination
@@ -47,7 +58,7 @@ Proposed and implemented solution:
 
 ## Decisions for clarity and clean code
 ### Code structure
-The code structure (main folders) is presented below. 
+The code structure (main folders) is presented below.
 ```commandline
 ├── github_searcher  [main directory for application]
 │   ├── api    [handlers and routers]
